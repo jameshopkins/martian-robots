@@ -6,8 +6,10 @@
 <body>
 <script src="scripts/planet.js"></script>
 <script src="scripts/mars.js"></script>
+<script src="scripts/terminal.js"></script>
 <script type="text/javascript;version=1.7">
-  var mars = new Mars('5 3\n1 1 E\nRFRFRFRF\n\n3 2 N\nFRRFLLFFRRFLL\n\n0 3 W\nLLFFFLFLFL');
+  var mars = new Mars();
+  terminal.createConnection(mars, '5 3\n1 1 E\nRFRFRFRF\n\n3 2 N\nFRRFLLFFRRFLL\n\n0 3 W\nLLFFFLFLFL');
 </script>
   </body>
 </html>

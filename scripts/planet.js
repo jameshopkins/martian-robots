@@ -20,26 +20,21 @@ function Planet(instructions) {
         width: gridCoordinates[0],
         height: gridCoordinates[1]
     };*/
-    this.processInstructions(instructions);
+    //this.processInstructions(instructions);
     //this.mapSurfaceToGrid();
+
+    console.log(this);
 
 }
 
-/**
- * Since the requirement is for an initial single message that contains both
- * planet-specific (grid size) and robot-specific (movemement instructions), we
- * need to seperate these concerns explicitly, and publish them to their
- * relevant subscriber interfaces.
- *
- * @param {Object} instructions
- */
-Planet.prototype.processInstructions = function(instructions) {
-    var instructions = instructions.split('\n');
-    console.log(instructions);
-};
-
 Planet.prototype.mapSurfaceToGrid = function() {
+    alert('This works!');
     //if (this.gridCoordinates.width > 50 || this.gridCoordinates.height > 50) {
     //    throw new Error('This is too big!');
     //}
 };
+
+Planet.prototype.setGridSize = function(coordinates) {
+    this.coordinates = coordinates.split(' ');
+};
+
