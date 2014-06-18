@@ -8,7 +8,7 @@
  * @constructor
  * @param {Array} gridCoordinates
  */
-function Planet(instructions) {
+function Planet() {
 
     // We never want to control the movements of robots on multiple planets
     // concurrently.
@@ -22,8 +22,6 @@ function Planet(instructions) {
     };*/
     //this.processInstructions(instructions);
     //this.mapSurfaceToGrid();
-
-    console.log(this);
 
 }
 

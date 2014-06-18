@@ -1,4 +1,7 @@
 var terminal = (function(){
+
+    var robots = [];
+
     /**
      * Since the requirement is for an initial single message that contains both
      * planet-specific (grid size) and robot-specific (movemement instructions), we
@@ -13,11 +16,12 @@ var terminal = (function(){
 
         // Set the planet's grid size.
         planet.setGridSize(instructions[0]);
-        
-        launchRobots(instructions[1]);
+        mobilizeRobots(instructions[1]);
     };
-    function launchRobots(commands) {
-        console.log(commands);
+    function mobilizeRobots(commands) {
+        commands.split('\n\n').forEach(function(command){
+            robots.push(new Robot(command));
+        });
     };
     return {
         createConnection: function(planet, instructions) {
@@ -25,6 +29,9 @@ var terminal = (function(){
                 throw new Error('The planet you want to connect to isn\'t real - we suggest you study the solar system better!');
             }
             processInstructions(planet, instructions);
+        },
+        retrieveRobots: function() {
+            return robots;
         }
     };
 })();
