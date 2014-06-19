@@ -11,13 +11,20 @@ var terminal = (function(){
      * @param {Object} instructions
      */
     function processInstructions(planet, instructions) {
+
+        if (instructions.length >= 100) {
+            throw new Error('The instructions provided are too long - 100 characters maximum.');
+        };
+
         // Seperate the planet's grid size from the instructions for the robots.
         var instructions = instructions.split(/\n([\s\S]+)?/, 2);
 
         // Set the planet's grid size.
         planet.setGridSize(instructions[0]);
         mobilizeRobots(instructions[1]);
+
     };
+
     function mobilizeRobots(commands) {
         commands.split('\n\n').forEach(function(command){
             robots.push(new Robot(command));
