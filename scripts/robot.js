@@ -38,11 +38,15 @@ function Robot(command) {
 }
 
 /**
+ * An implementation of a circular buffer to allow us to move between cardinal
+ * points with ease.
  * 
+ * @param {String} cardinal point
+ * @param {String} direction - either 'L' or 'R'
  */
 Robot.prototype.createCircularBufferOfCardinalPoints = function(point, direction) {
     var pointIndex = this.cardinalPoints.indexOf(point);
-    var hello;
+
     switch (direction) {
         case 'L':
             pointIndex = pointIndex - 1;
@@ -61,10 +65,15 @@ Robot.prototype.createCircularBufferOfCardinalPoints = function(point, direction
 };
 
 Robot.prototype.startMovementSequence = function(initialCardinalPoint, sequence) {
-    var initialCardinalPoint = initialCardinalPoint;
+    var cardinalPoint = initialCardinalPoint;
     for ( var i = 0; i < 3; i++ ) {
         var movement = sequence.charAt(i);
-        initialCardinalPoint = this.createCircularBufferOfCardinalPoints(initialCardinalPoint, movement);
-        console.log(initialCardinalPoint);
+        if (movement !== 'F') {
+            cardinalPoint = this.createCircularBufferOfCardinalPoints(cardinalPoint, movement);
+        }
+        else {
+            console.log(cardinalPoint);
+        }
+        //console.log(cardinalPoint);
     };
 };
