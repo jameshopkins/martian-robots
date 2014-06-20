@@ -23,11 +23,13 @@ function Robot(command) {
 
     this.currentPosition = {
         x: parseInt(gridCoordinates[0]),
-        y: parseInt(gridCoordinates[1])
+        y: parseInt(gridCoordinates[1]),
+        get readable () {
+            return this.x + ',' + this.y;
+        }
     };
 
-    console.log('Robot activated (facing ' + initialCardinalPoint + ')');
-
+    console.log('Robot activated at ' + this.currentPosition.readable + ' (facing ' + initialCardinalPoint + ')');
     this.startMovementSequence(initialCardinalPoint, position[1]);
 
 }
@@ -53,20 +55,16 @@ Robot.prototype.moveForward = function(cardinalPoint) {
         }
     };
 
-    var operators = {
+    // Because you can't store an operator in a variable. 
+    var signs = {
         positive: function(axis) { return ++this.currentPosition[axis]; }.bind(this),
         negative: function(axis) { return --this.currentPosition[axis]; }.bind(this)
     };
 
-    console.log(this.currentPosition);
     var axis = axis[cardinalPoint]['axis'];
-    operators[axis[1]](axis[0]);
-    console.log(this.currentPosition);
-    //console.log(operators[cardinalPoint['axis'][1]](operators[cardinalPoint['axis'][0]]));
+    signs[axis[1]](axis[0]);
+    console.log('Robot has moved forward to ' + this.currentPosition.readable);
 
-    //var hello = 1;
-    //console.log(++hello);
-    //console.log('Moved forward!', cardinalPoint);
 };
 
 /**
