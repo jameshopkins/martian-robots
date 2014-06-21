@@ -21,13 +21,13 @@ var terminal = (function(){
 
         // Set the planet's grid size.
         planet.setGridSize(instructions[0]);
-        mobilizeRobots(instructions[1]);
+        mobilizeRobots(instructions[0], instructions[1]);
 
     };
 
-    function mobilizeRobots(commands) {
+    function mobilizeRobots(gridBoundaries, commands) {
         commands.split('\n\n').forEach(function(command){
-            robots.push(new Robot(command));
+            robots.push(new Robot(gridBoundaries, command));
         });
     };
     return {

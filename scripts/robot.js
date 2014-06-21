@@ -1,8 +1,9 @@
-function Robot(command) {
+function Robot(gridBoundaries, command) {
 
     var command = command.split('\n'),
         gridCoordinates = command[0].split(' '),
-        initialCardinalPoint = command[0].split(' ')[2];
+        initialCardinalPoint = command[0].split(' ')[2],
+        gridBoundaries = gridBoundaries.split(' ');
 
     this.movementTypes = {
         L: {
@@ -21,23 +22,18 @@ function Robot(command) {
 
     this.cardinalPoints = ['N', 'E', 'S', 'W'];
 
-    var position = {
-        x: parseInt(gridCoordinates[0]),
-        y: parseInt(gridCoordinates[1]),
+    this.gridBoundaries = {
+        'x': gridBoundaries[0],
+        'y': gridBoundaries[1]
     };
 
-   // A simple way of breaking the Object reference.
-   this.initialPosition = Object.create(position);
-   this.currentPosition = Object.create(position);
-
-    // Define an accessor descriptor to give us a human-readable version of the
-    // coordinates.
-    // @TODO Why is the accessor descriptor being applied to this.initialPosition
-    //       too?
-    Object.defineProperty(this.currentPosition, 'rendered', {
-        __proto__: null,
-        get: function() { return this.x + ',' + this.y; }
-    });
+    this.currentPosition = {
+        x: parseInt(gridCoordinates[0]),
+        y: parseInt(gridCoordinates[1]),
+        get rendered() {
+            return this.x + ',' + this.y;
+        }
+    };
 
     console.log('Robot activated at ' + this.currentPosition.rendered + ' (facing ' + initialCardinalPoint + ')');
     this.startMovementSequence(initialCardinalPoint, command[1]);
