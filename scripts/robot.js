@@ -86,7 +86,6 @@ Robot.prototype.moveForward = function(cardinalPoint) {
  */
 Robot.prototype.createCircularBufferOfCardinalPoints = function(point, direction) {
     var pointIndex = this.cardinalPoints.indexOf(point);
-
     switch (direction) {
         case 'L':
             pointIndex = --pointIndex;
@@ -99,7 +98,7 @@ Robot.prototype.createCircularBufferOfCardinalPoints = function(point, direction
         pointIndex = 0;
     };
     if (pointIndex == -1) {
-        pointIndex = --this.cardinalPoints.length;
+        pointIndex = this.cardinalPoints.length - 1;
     }
     return this.cardinalPoints[pointIndex];
 };
