@@ -5,6 +5,8 @@ function Robot(gridBoundaries, command) {
         initialCardinalPoint = command[0].split(' ')[2],
         gridBoundaries = gridBoundaries.split(' ');
 
+    this.isLost = false;
+
     this.movementTypes = {
         L: {
             direction: 'left',
@@ -69,7 +71,19 @@ Robot.prototype.moveForward = function(cardinalPoint) {
 
     var axis = axis[cardinalPoint]['axis'];
     signs[axis[1]](axis[0]);
-    console.log('Robot has moved forward to ' + this.currentPosition.rendered);
+
+    switch (true) {
+        case this.currentPosition.x > this.gridBoundaries.x:
+        case this.currentPosition.x === -1:
+        case this.currentPosition.y > this.gridBoundaries.y:
+        case this.currentPosition.y === -1:
+            console.log('Robot is lost');
+            this.isLost = true;
+            break;
+        default:
+            console.log('Robot has moved forward to ' + this.currentPosition.rendered);
+            break;
+    }
 
 };
 
@@ -102,6 +116,9 @@ Robot.prototype.createCircularBufferOfCardinalPoints = function(point, direction
 Robot.prototype.startMovementSequence = function(initialCardinalPoint, sequence) {
     var cardinalPoint = initialCardinalPoint;
     for (var i = 0; i < sequence.length; i++) {
+
+        if (this.isLost) { return; }
+
         var movement = sequence.charAt(i);
         switch (movement) {
             case 'L':
