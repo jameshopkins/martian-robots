@@ -61,15 +61,21 @@ Robot.prototype.moveForward = function(cardinalPoint) {
             'name': 'west',
             'axis': ['x', 'negative']
         }
-    };
+    },
 
-    // Because you can't store an operator in a variable. 
-    var signs = {
+    // Because you can't store an operator in a variable.
+    signs = {
         positive: function(axis) { return ++this.currentPosition[axis]; }.bind(this),
         negative: function(axis) { return --this.currentPosition[axis]; }.bind(this)
-    };
+    },
 
-    var axis = axis[cardinalPoint]['axis'];
+    // Capture the previous position in case the robot gets lost, and we need
+    // to record it's last known position on the grid.
+    // @TODO Since we're breaking the reference in a fairly rudimentary way, not 
+    //       sure how nicely this plays with the accessor descriptor defined?
+    previousPosition = JSON.parse(JSON.stringify(this.currentPosition));
+
+    axis = axis[cardinalPoint]['axis'];
     signs[axis[1]](axis[0]);
 
     switch (true) {
@@ -77,8 +83,8 @@ Robot.prototype.moveForward = function(cardinalPoint) {
         case this.currentPosition.x === -1:
         case this.currentPosition.y > this.gridBoundaries.y:
         case this.currentPosition.y === -1:
-            console.log('Robot is lost');
             this.isLost = true;
+            console.log('Robot is lost');
             break;
         default:
             console.log('Robot has moved forward to ' + this.currentPosition.rendered);
@@ -117,7 +123,8 @@ Robot.prototype.startMovementSequence = function(initialCardinalPoint, sequence)
     var cardinalPoint = initialCardinalPoint;
     for (var i = 0; i < sequence.length; i++) {
 
-        if (this.isLost) { return; }
+        // Stop processing the sequence if the robot becomes lost.
+        if (this.isLost) return;
 
         var movement = sequence.charAt(i);
         switch (movement) {
@@ -130,5 +137,6 @@ Robot.prototype.startMovementSequence = function(initialCardinalPoint, sequence)
                 this.moveForward(cardinalPoint);
                 break;
         }
+
     };
 };
