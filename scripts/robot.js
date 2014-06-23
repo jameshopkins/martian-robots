@@ -15,7 +15,17 @@ function Robot(gridBoundaries, command) {
 
     this.isLost = false;
 
-    this.cardinalPoints = ['N', 'E', 'S', 'W'];
+    this.cardinalDirectionsGrid = [
+        ['N', 'y', 'positive'],
+        ['E', 'x', 'positive'],
+        ['S', 'y', 'negative'],
+        ['W', 'x', 'negative']
+    ];
+
+    this.getCardinalDirectionData = function(cardinalPoint) {
+        var position = this.cardinalDirectionsGrid.map((el) => el[0]).indexOf(cardinalPoint);
+        return [position, this.cardinalDirectionsGrid[position]];
+    }
 
     this.gridBoundaries = {
         'x': gridBoundaries[0],
@@ -38,27 +48,20 @@ function Robot(gridBoundaries, command) {
 
 Robot.prototype.moveForward = function(cardinalPoint) {
 
-    var axis = {
-        'N': ['y', 'positive'],
-        'E': ['x', 'positive'],
-        'S': ['y', 'negative'],
-        'W': ['x', 'negative']
-    },
-
     // Because you can't store an operator in a variable.
     signs = {
         positive: function(axis) { return this.currentPosition[axis] + 1; }.bind(this),
         negative: function(axis) { return this.currentPosition[axis] - 1; }.bind(this)
-    },
+    };
 
-    requiredAxis = axis[cardinalPoint],
+    var [, requiredAxis] = this.getCardinalDirectionData(cardinalPoint);
 
-    newCoordinate = signs[requiredAxis[1]](requiredAxis[0]);
+    newCoordinate = signs[requiredAxis[2]](requiredAxis[1]);
 
-    if (newCoordinate <= this.gridBoundaries[requiredAxis[0]]) {
+    if (newCoordinate <= this.gridBoundaries[requiredAxis[1]]) {
         // Only move the robot if that movement results in the robot being
         // positioned within the grid boundaries.
-        this.currentPosition[requiredAxis[0]] = newCoordinate;
+        this.currentPosition[requiredAxis[1]] = newCoordinate;
         console.log('Robot has moved forward to ' + this.currentPosition.rendered);
     }
     else {
@@ -88,7 +91,7 @@ Robot.prototype.moveForward = function(cardinalPoint) {
  * @param {String} direction - either 'L' or 'R'
  */
 Robot.prototype.createCircularBufferOfCardinalPoints = function(point, direction) {
-    var pointIndex = this.cardinalPoints.indexOf(point);
+    var [pointIndex, ] = this.getCardinalDirectionData(point);
 
     switch (direction) {
         case 'L':
@@ -98,13 +101,13 @@ Robot.prototype.createCircularBufferOfCardinalPoints = function(point, direction
             pointIndex = ++pointIndex;
             break;
     };
-    if (pointIndex >= this.cardinalPoints.length) {
+    if (pointIndex >= this.cardinalDirectionsGrid.length) {
         pointIndex = 0;
     };
     if (pointIndex == -1) {
-        pointIndex = this.cardinalPoints.length - 1;
+        pointIndex = this.cardinalDirectionsGrid.length - 1;
     }
-    return this.cardinalPoints[pointIndex];
+    return this.cardinalDirectionsGrid[pointIndex][0];
 };
 
 Robot.prototype.startMovementSequence = function(initialCardinalPoint, sequence) {
