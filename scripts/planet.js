@@ -16,6 +16,8 @@ function Planet() {
         return Planet.instance;
     Planet.instance = this;
 
+    lostRobots = [];
+
     /*this.gridCoordinates = {
         width: gridCoordinates[0],
         height: gridCoordinates[1]
