@@ -26,7 +26,7 @@ var terminal = (function(){
     };
 
     function mobilizeRobots(gridBoundaries, commands) {
-        commands.split('\n\n').forEach(function(command){
+        commands.split('\n\n').forEach(command => {
             robots.push(new Robot(gridBoundaries, command));
         });
     };
