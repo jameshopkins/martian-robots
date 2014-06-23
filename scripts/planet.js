@@ -2,11 +2,7 @@
  * Provides us with an interface to set up a suitable enviroment,
  * so that robots that move around on it's surface.
  * 
- * Individual planets inherit these interfaces through Object.create() since we
- * want to control when instantiation of that constructor happens.
- * 
  * @constructor
- * @param {Array} gridCoordinates
  */
 function Planet() {
 
@@ -18,23 +14,12 @@ function Planet() {
 
     lostRobots = [];
 
-    /*this.gridCoordinates = {
-        width: gridCoordinates[0],
-        height: gridCoordinates[1]
-    };*/
-    //this.processInstructions(instructions);
-    //this.mapSurfaceToGrid();
-
 }
 
-Planet.prototype.mapSurfaceToGrid = function() {
-    alert('This works!');
-    //if (this.gridCoordinates.width > 50 || this.gridCoordinates.height > 50) {
-    //    throw new Error('This is too big!');
-    //}
-};
-
 Planet.prototype.setGridSize = function(coordinates) {
-    this.coordinates = coordinates.split(' ');
+    this.gridCoordinates = coordinates.split(' ');
+    if (this.gridCoordinates[0] > 50 || this.gridCoordinates[1] > 50) {
+        throw new Error('This grid size is too large. It must be 50x50 or smaller');
+    }
 };
 
