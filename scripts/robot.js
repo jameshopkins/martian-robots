@@ -15,21 +15,6 @@ function Robot(gridBoundaries, command) {
 
     this.isLost = false;
 
-    this.movementTypes = {
-        L: {
-            direction: 'left',
-            message: 'turned left'
-        },
-        R: {
-            direction: 'right',
-            message: 'turned right'
-        },
-        F: {
-            direction: 'forward',
-            message: 'moved forward'
-        }
-    };
-
     this.cardinalPoints = ['N', 'E', 'S', 'W'];
 
     this.gridBoundaries = {
@@ -37,6 +22,7 @@ function Robot(gridBoundaries, command) {
         'y': gridBoundaries[1]
     };
 
+    // Update after every legal movement.
     this.currentPosition = {
         x: parseInt(gridCoordinates[0]),
         y: parseInt(gridCoordinates[1]),
@@ -53,22 +39,10 @@ function Robot(gridBoundaries, command) {
 Robot.prototype.moveForward = function(cardinalPoint) {
 
     var axis = {
-        'N': {
-            'name': 'north',
-            'axis': ['y', 'positive'],
-        },
-        'E': {
-            'name': 'east',
-            'axis': ['x', 'positive'],
-        },
-        'S': {
-            'name': 'south',
-            'axis': ['y', 'negative'],
-        },
-        'W': {
-            'name': 'west',
-            'axis': ['x', 'negative']
-        }
+        'N': ['y', 'positive'],
+        'E': ['x', 'positive'],
+        'S': ['y', 'negative'],
+        'W': ['x', 'negative']
     },
 
     // Because you can't store an operator in a variable.
@@ -77,7 +51,7 @@ Robot.prototype.moveForward = function(cardinalPoint) {
         negative: function(axis) { return this.currentPosition[axis] - 1; }.bind(this)
     },
 
-    requiredAxis = axis[cardinalPoint]['axis'],
+    requiredAxis = axis[cardinalPoint],
 
     newCoordinate = signs[requiredAxis[1]](requiredAxis[0]);
 
@@ -97,6 +71,8 @@ Robot.prototype.moveForward = function(cardinalPoint) {
         // where a previous robot hasn't been lost from.
         this.isLost = true;
         console.log('Robot is lost!');
+
+        // Make sure the lost robot log is populated with only unique values.
         if (lostRobots.indexOf(this.currentPosition.rendered) === -1) {
             lostRobots.push(this.currentPosition.rendered);
         }
@@ -113,6 +89,7 @@ Robot.prototype.moveForward = function(cardinalPoint) {
  */
 Robot.prototype.createCircularBufferOfCardinalPoints = function(point, direction) {
     var pointIndex = this.cardinalPoints.indexOf(point);
+
     switch (direction) {
         case 'L':
             pointIndex = --pointIndex;
@@ -132,17 +109,19 @@ Robot.prototype.createCircularBufferOfCardinalPoints = function(point, direction
 
 Robot.prototype.startMovementSequence = function(initialCardinalPoint, sequence) {
     var cardinalPoint = initialCardinalPoint;
-    for (var i = 0; i < sequence.length; i++) {
+
+    for (let i = 0; i < sequence.length; i++) {
 
         // Stop processing the sequence if the robot becomes lost.
         if (this.isLost) return;
 
-        var movement = sequence.charAt(i);
+        let movement = sequence.charAt(i);
         switch (movement) {
             case 'L':
             case 'R':
+                let movementTypes = { L: 'left', R: 'right' };
                 cardinalPoint = this.createCircularBufferOfCardinalPoints(cardinalPoint, movement);
-                console.log('Robot has ' + this.movementTypes[movement].message + ' (now facing ' + cardinalPoint + ')');
+                console.log('Robot has ' + movementTypes[movement] + ' (now facing ' + cardinalPoint + ')');
                 break;
             case 'F':
                 this.moveForward(cardinalPoint);
@@ -150,4 +129,5 @@ Robot.prototype.startMovementSequence = function(initialCardinalPoint, sequence)
         }
 
     };
+
 };
