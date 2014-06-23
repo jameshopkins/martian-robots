@@ -15,6 +15,8 @@ function Robot(gridBoundaries, command) {
 
     this.isLost = false;
 
+    // Store the associations between cardinal directions and cartesian grid
+    // lines.
     this.cardinalDirectionsGrid = [
         ['N', 'y', 'positive'],
         ['E', 'x', 'positive'],
@@ -22,6 +24,13 @@ function Robot(gridBoundaries, command) {
         ['W', 'x', 'negative']
     ];
 
+    /**
+     * Retrieve data associating cardinal direction and cartesian grid lines.
+     *
+     * @param {String} cardinalPoint
+     * @return {String|Array} The position of the cardinal point within our
+     *         circular buffer.
+     */
     this.getCardinalDirectionData = function(cardinalPoint) {
         var position = this.cardinalDirectionsGrid.map((el) => el[0]).indexOf(cardinalPoint);
         return [position, this.cardinalDirectionsGrid[position]];
@@ -32,7 +41,7 @@ function Robot(gridBoundaries, command) {
         'y': gridBoundaries[1]
     };
 
-    // Update after every legal movement.
+    // Updates after every legal movement.
     this.currentPosition = {
         x: parseInt(gridCoordinates[0]),
         y: parseInt(gridCoordinates[1]),
@@ -46,6 +55,11 @@ function Robot(gridBoundaries, command) {
 
 };
 
+/**
+ * Processes an instruction to move forward.
+ *
+ * @param {String} cardinalPoint
+ */
 Robot.prototype.moveForward = function(cardinalPoint) {
 
     // Because you can't store an operator in a variable.
@@ -90,8 +104,8 @@ Robot.prototype.moveForward = function(cardinalPoint) {
  * @param {String} cardinal point
  * @param {String} direction - either 'L' or 'R'
  */
-Robot.prototype.createCircularBufferOfCardinalPoints = function(point, direction) {
-    var [pointIndex, ] = this.getCardinalDirectionData(point);
+Robot.prototype.createCircularBufferOfCardinalPoints = function(cardinalPoint, direction) {
+    var [pointIndex, ] = this.getCardinalDirectionData(cardinalPoint);
 
     switch (direction) {
         case 'L':
@@ -107,9 +121,16 @@ Robot.prototype.createCircularBufferOfCardinalPoints = function(point, direction
     if (pointIndex == -1) {
         pointIndex = this.cardinalDirectionsGrid.length - 1;
     }
+
     return this.cardinalDirectionsGrid[pointIndex][0];
 };
 
+/**
+ * Processes the each individual movement instruction within a command sequence.
+ *
+ * @param {String} initialCardinalPoint
+ * @param {String} sequence
+ */
 Robot.prototype.startMovementSequence = function(initialCardinalPoint, sequence) {
     var cardinalPoint = initialCardinalPoint;
 
