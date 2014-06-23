@@ -1,3 +1,11 @@
+/**
+ * Creates a robot as well as handling all of it's movement.
+ *
+ * @constructor
+ * @param {String} gridBoundaries - The permitted grid boundaries in which the
+ *                 robot is allowed to move around in.
+ * @param {String} command - The instructions detailing the movement sequence.
+ */
 function Robot(gridBoundaries, command) {
 
     var command = command.split('\n'),
@@ -67,18 +75,26 @@ Robot.prototype.moveForward = function(cardinalPoint) {
     signs = {
         positive: function(axis) { return this.currentPosition[axis] + 1; }.bind(this),
         negative: function(axis) { return this.currentPosition[axis] - 1; }.bind(this)
-    };
+    },
 
-    var requiredAxis = axis[cardinalPoint]['axis'];
+    requiredAxis = axis[cardinalPoint]['axis'],
 
-    var newCoordinate = signs[requiredAxis[1]](requiredAxis[0]);
+    newCoordinate = signs[requiredAxis[1]](requiredAxis[0]);
 
     if (newCoordinate <= this.gridBoundaries[requiredAxis[0]]) {
+        // Only move the robot if that movement results in the robot being
+        // positioned within the grid boundaries.
         this.currentPosition[requiredAxis[0]] = newCoordinate;
         console.log('Robot has moved forward to ' + this.currentPosition.rendered);
     }
     else {
+        // If a previous robot has dropped off the world from the same point
+        // the current robot has been instructed to move from, then ignore the
+        // current command.
         if (lostRobots.indexOf(this.currentPosition.rendered) > -1) return;
+
+        // A robot only becomes lost if it drops off the world from a position
+        // where a previous robot hasn't been lost from.
         this.isLost = true;
         console.log('Robot is lost!');
         if (lostRobots.indexOf(this.currentPosition.rendered) === -1) {
