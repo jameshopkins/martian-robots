@@ -65,30 +65,25 @@ Robot.prototype.moveForward = function(cardinalPoint) {
 
     // Because you can't store an operator in a variable.
     signs = {
-        positive: function(axis) { return ++this.currentPosition[axis]; }.bind(this),
-        negative: function(axis) { return --this.currentPosition[axis]; }.bind(this)
-    },
+        positive: function(axis) { return this.currentPosition[axis] + 1; }.bind(this),
+        negative: function(axis) { return this.currentPosition[axis] - 1; }.bind(this)
+    };
 
-    // Capture the previous position in case the robot gets lost, and we need
-    // to record it's last known position on the grid.
-    // @TODO Since we're breaking the reference in a fairly rudimentary way, not 
-    //       sure how nicely this plays with the accessor descriptor defined?
-    previousPosition = JSON.parse(JSON.stringify(this.currentPosition));
+    var requiredAxis = axis[cardinalPoint]['axis'];
 
-    axis = axis[cardinalPoint]['axis'];
-    signs[axis[1]](axis[0]);
+    var newCoordinate = signs[requiredAxis[1]](requiredAxis[0]);
 
-    switch (true) {
-        case this.currentPosition.x > this.gridBoundaries.x:
-        case this.currentPosition.x === -1:
-        case this.currentPosition.y > this.gridBoundaries.y:
-        case this.currentPosition.y === -1:
-            this.isLost = true;
-            console.log('Robot is lost');
-            break;
-        default:
-            console.log('Robot has moved forward to ' + this.currentPosition.rendered);
-            break;
+    if (newCoordinate <= this.gridBoundaries[requiredAxis[0]]) {
+        this.currentPosition[requiredAxis[0]] = newCoordinate;
+        console.log('Robot has moved forward to ' + this.currentPosition.rendered);
+    }
+    else {
+        if (lostRobots.indexOf(this.currentPosition.rendered) > -1) return;
+        this.isLost = true;
+        console.log('Robot is lost!');
+        if (lostRobots.indexOf(this.currentPosition.rendered) === -1) {
+            lostRobots.push(this.currentPosition.rendered);
+        }
     }
 
 };
