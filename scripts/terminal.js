@@ -21,6 +21,8 @@ var terminal = (function(){
 
         // Set the planet's grid size.
         planet.setGridSize(instructions[0]);
+
+        // Start the robots!
         mobilizeRobots(instructions[0], instructions[1]);
 
     };
