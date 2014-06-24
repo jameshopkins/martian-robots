@@ -1,4 +1,4 @@
 Martian-Robots
 ==============
 
-Please view in an ES7 capable browser.
+Please view on Firefox 30 - V8 doesn't support ``application/javascript;version=1.7``
