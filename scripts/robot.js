@@ -74,6 +74,11 @@ Robot.prototype.moveForward = function(cardinalPoint) {
 
     newCoordinate = signs[requiredAxis[2]](requiredAxis[1]);
 
+    // 1) Register the robot as lost if it strays beyond the upper-right
+    //    coordinates of the reactangular world.
+    // 2) Since the lower-left coordinates are assumed to be 0, 0, register the
+    //    robot as lost if it strays into the negative line of either axis on
+    //    the Cartesian grid.
     if (newCoordinate > this.gridBoundaries[requiredAxis[1]] || newCoordinate < 0) {
         // If a previous robot has dropped off the world from the same point
         // the current robot has been instructed to move from, then ignore the
