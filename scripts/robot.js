@@ -65,12 +65,12 @@ function Robot(gridBoundaries, command) {
 Robot.prototype.moveForward = function(cardinalPoint) {
 
     // Because you can't store an operator in a variable.
-    signs = {
+    var signs = {
         positive: function(axis) { return this.currentPosition[axis] + 1; }.bind(this),
         negative: function(axis) { return this.currentPosition[axis] - 1; }.bind(this)
-    };
+    },
 
-    var [, requiredAxis] = this.getCardinalDirectionData(cardinalPoint);
+    [, requiredAxis] = this.getCardinalDirectionData(cardinalPoint),
 
     newCoordinate = signs[requiredAxis[2]](requiredAxis[1]);
 
