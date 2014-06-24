@@ -1,4 +1,4 @@
 Martian-Robots
 ==============
 
-Please view in an ES6 capable browser.
+Please view in an ES7 capable browser.
