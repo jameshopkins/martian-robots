@@ -74,13 +74,7 @@ Robot.prototype.moveForward = function(cardinalPoint) {
 
     newCoordinate = signs[requiredAxis[2]](requiredAxis[1]);
 
-    if (newCoordinate <= this.gridBoundaries[requiredAxis[1]]) {
-        // Only move the robot if that movement results in the robot being
-        // positioned within the grid boundaries.
-        this.currentPosition[requiredAxis[1]] = newCoordinate;
-        console.log('Robot has moved forward to ' + this.currentPosition.rendered);
-    }
-    else {
+    if (newCoordinate > this.gridBoundaries[requiredAxis[1]] || newCoordinate < 0) {
         // If a previous robot has dropped off the world from the same point
         // the current robot has been instructed to move from, then ignore the
         // current command.
@@ -95,6 +89,12 @@ Robot.prototype.moveForward = function(cardinalPoint) {
         if (lostRobots.indexOf(this.currentPosition.rendered) === -1) {
             lostRobots.push(this.currentPosition.rendered);
         }
+    }
+    else {
+        // Only move the robot if that movement results in the robot being
+        // positioned within the grid boundaries.
+        this.currentPosition[requiredAxis[1]] = newCoordinate;
+        console.log('Robot has moved forward to ' + this.currentPosition.rendered);
     }
 
 };
