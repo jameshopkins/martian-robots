@@ -1,4 +1,8 @@
-var terminal = (function(){
+var terminal = (function(globals){
+
+    'use strict';
+
+    globals.lostRobots = [];
 
     var robots = [];
 
@@ -43,4 +47,4 @@ var terminal = (function(){
             return robots;
         }
     };
-})();
+})(this);

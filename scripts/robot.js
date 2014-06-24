@@ -8,6 +8,8 @@
  */
 function Robot(gridBoundaries, command) {
 
+    'use strict';
+
     var command = command.split('\n'),
         gridCoordinates = command[0].split(' '),
         initialCardinalPoint = command[0].split(' ')[2],

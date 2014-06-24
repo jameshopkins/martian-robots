@@ -6,13 +6,13 @@
  */
 function Planet() {
 
+    'use strict';
+
     // We never want to control the movements of robots on multiple planets
     // concurrently.
     if (Planet.instance)
         return Planet.instance;
     Planet.instance = this;
-
-    lostRobots = [];
 
 }
 
