@@ -15,11 +15,13 @@
     return Planet .instance
   Planet.instance = @
 
-Planet::setGridSize = (coordinates) !->
+Planet:: =
 
-  @grid-coordinates = coordinates .split ' '
+  setGridSize: (coordinates) !->
 
-  if @grid-coordinates[0] > 50 or @grid-coordinates[1] > 50
-    throw new Error 'This grid size is too large. It must be 50x50 or smaller'
+    @grid-coordinates = coordinates .split ' '
+
+    if @grid-coordinates[0] > 50 or @grid-coordinates[1] > 50
+      throw new Error 'This grid size is too large. It must be 50x50 or smaller'
 
 module.exports = Planet

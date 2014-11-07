@@ -21,6 +21,7 @@ module.exports = do ->
     # Seperate the planet's grid size from the robot instructions.
     instructions .= split /\n([\s\S]+)?/ 2
 
+    # Check valditiy of upper-right grid coordinates.
     unless /^\d \d\b/ .test instructions[0]
       throw new Error 'The upper-right grid coordinates are an illegal format.'
 
@@ -28,7 +29,7 @@ module.exports = do ->
     planet .set-grid-size instructions[0]
 
     # Start the robots!
-    #mobilizeRobots(instructions[0], instructions[1]);
+    #mobilizeRobots instructions[0], instructions[1]
 
   {
 

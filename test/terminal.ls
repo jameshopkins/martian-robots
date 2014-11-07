@@ -7,7 +7,7 @@ require! {
 Planet = require '../src/planet'
 assert = chai.assert
 
-describe 'Connection' !->
+describe 'Terminal' !->
 
   var valid-planet
   var valid-instructions
