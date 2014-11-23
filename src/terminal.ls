@@ -1,6 +1,6 @@
-Planet = require './planet'
+{map, split} = require 'prelude-ls'
 
-module.exports = do ->
+module.exports =
 
   'use strict'
 
@@ -10,34 +10,27 @@ module.exports = do ->
    * need to seperate these concerns explicitly, and publish them to their
    * relevant subscriber interfaces.
    *
-   * @param {Object} planet
-   * @param {String} instructions
+   * @param {String} it - the raw instructions
    */
-  !function process-instructions (planet, instructions) then
+  process-instructions: ->
 
-    if instructions.length >= 100
-      throw new Error 'The instructions provided are too long - 100 characters maximum.'
+    if it.length >= 100
+      throw new RangeError 'The instructions provided are too long - 100 characters maximum.'
 
     # Seperate the planet's grid size from the robot instructions.
-    instructions .= split /\n([\s\S]+)?/ 2
+    [grid-size, commands] = it .split /\n([\s\S]+)?/ 2
 
-    # Check valditiy of upper-right grid coordinates.
-    unless /^\d \d\b/ .test instructions[0]
-      throw new Error 'The upper-right grid coordinates are an illegal format.'
+    grid-size .= split ' '
 
-    # Set the planet's grid size.
-    planet .set-grid-size instructions[0]
+    if grid-size[0] > 50 or grid-size[1] > 50
+      throw new RangeError 'hello'
 
-    # Start the robots!
-    #mobilizeRobots instructions[0], instructions[1]
+    [
+      grid-size
+      commands |> split \\n\n |> map -> split \\n it
+    ]
 
-  {
+  mobilize-robots: (grid-boundaries, commands) !->
 
-    create-connection: (planet, instructions) !->
-
-      unless planet instanceof Planet
-        throw new Error 'The planet you want to connect to isn\'t real - we suggest you study the solar system better!'
-
-      process-instructions planet, instructions
-
-  }
+    command <-! commands .split \\n\n .for-each
+    new Robot gridBoundaries, command

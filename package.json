@@ -7,9 +7,10 @@
     "chai": "latest",
     "sinon": "latest",
     "mocha": "latest",
-    "LiveScript": "latest"
+    "LiveScript": "latest",
+    "prelude-ls": "latest"
   },
   "scripts": {
-    "test": "mocha --compilers ls:LiveScript"
+    "test": "node_modules/mocha/bin/mocha --compilers ls:LiveScript"
   }
 }

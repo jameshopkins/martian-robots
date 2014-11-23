@@ -1,32 +1,16 @@
-require! {
-  'chai'
-  'sinon'
-  '../src/terminal'
-}
+require! <[ chai sinon ../src/terminal ]>
 
 Planet = require '../src/planet'
 assert = chai.assert
 
 describe 'Terminal' !->
 
-  var valid-planet
   var valid-instructions
 
   beforeEach !->
-    valid-planet := new Planet!
     valid-instructions := '5 3\n1 1 E\nRFRFRFRF\n\n3 2 N\nFRRFLLFFRRFLL\n\n0 3 W\nLLFFFLFLFL'
 
-  specify 'should only attempt a connection to a valid planet' !->
-
-    assert.does-not-throw do
-      terminal .create-connection .bind terminal, valid-planet, valid-instructions
-
-    # Invalid planet
-    fake-planet = !->
-    assert.throw do
-      terminal .create-connection .bind terminal, new fake-planet!, valid-instructions
-      Error
-      'The planet you want to connect to isn\'t real - we suggest you study the solar system better!'
+    console.log(terminal .process-instructions valid-instructions)
 
   specify 'call the method that sets the grid size' !->
 
@@ -34,12 +18,19 @@ describe 'Terminal' !->
     terminal .create-connection valid-planet, valid-instructions
     assert (valid-planet .set-grid-size .called-once)
 
+  specify 'call the method that mobilizes the robots' !->
+
+    sinon .spy valid-planet, \setGridSize
+    terminal .create-connection valid-planet, valid-instructions
+    assert (valid-planet .set-grid-size .called-once)
+
+  specify 'return the commands'
 
   describe 'Instructions', !->
 
     specify 'throws an error if the string is 100 characters or more' !->
 
-      instructions = Array 101 .join \a
+      instructions = \a * 101
 
       assert.throw do
         terminal .create-connection .bind terminal, valid-planet, instructions
