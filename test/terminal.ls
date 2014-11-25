@@ -1,60 +1,33 @@
 require! <[ chai sinon ../src/terminal ]>
 
-Planet = require '../src/planet'
-assert = chai.assert
+{assert} = chai
 
-describe 'Terminal' !->
+describe 'Instructions input', !->
 
-  var valid-instructions
+  specify 'throws an error if the string is 100 characters or more' !->
 
-  beforeEach !->
-    valid-instructions := '5 3\n1 1 E\nRFRFRFRF\n\n3 2 N\nFRRFLLFFRRFLL\n\n0 3 W\nLLFFFLFLFL'
+    assert.throw do
+      terminal .process-instructions .bind terminal, \a * 100
+      Error
+      'The instructions provided are too long - 100 characters maximum.'
 
-    console.log(terminal .process-instructions valid-instructions)
+  specify 'throws an error if no commands can be destructured from the input string' !->
 
-  specify 'call the method that sets the grid size' !->
+    # Split on the first occurence of a newline, and treat the first item as the
+    # commands
+    assert.throw do
+      terminal .process-instructions .bind terminal, \a * 99
+      Error
+      'There are no commands defined'
 
-    sinon .spy valid-planet, \setGridSize
-    terminal .create-connection valid-planet, valid-instructions
-    assert (valid-planet .set-grid-size .called-once)
+  specify 'throws an error if either of the upper right coordinates are larger than 50' !->
 
-  specify 'call the method that mobilizes the robots' !->
+    assert.throw do
+      terminal .process-instructions .bind terminal, '51 0\nA'
+      Error
+      'This grid size is too large. It must be 50x50 or smaller'
 
-    sinon .spy valid-planet, \setGridSize
-    terminal .create-connection valid-planet, valid-instructions
-    assert (valid-planet .set-grid-size .called-once)
-
-  specify 'return the commands'
-
-  describe 'Instructions', !->
-
-    specify 'throws an error if the string is 100 characters or more' !->
-
-      instructions = \a * 101
-
-      assert.throw do
-        terminal .create-connection .bind terminal, valid-planet, instructions
-        Error
-        'The instructions provided are too long - 100 characters maximum.'
-
-    specify 'throws an error if the upper-right coordinates are of an illegal format' !->
-
-      error-message = 'The upper-right grid coordinates are an illegal format'
-
-      # No delimeting space between signs
-      assert.throw do
-        terminal .create-connection .bind terminal, valid-planet, '22'
-        Error
-        error-message
-
-      # Non-numerical signs
-      assert.throw do
-        terminal .create-connection .bind terminal, valid-planet, 'A B'
-        Error
-        error-message
-
-      # Invalid sign length
-      assert.throw do
-        terminal .create-connection .bind terminal, valid-planet, '2 22'
-        Error
-        error-message
+    assert.throw do
+      terminal .process-instructions .bind terminal, '0 51\nA'
+      Error
+      'This grid size is too large. It must be 50x50 or smaller'
