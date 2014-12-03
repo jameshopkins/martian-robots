@@ -5,10 +5,7 @@ require! <[ ./robot ]>
 module.exports =
 
   /**
-   * Since the requirement is for an initial single message that contains both
-   * planet-specific (grid size) and robot-specific (movemement instructions), we
-   * need to seperate these concerns explicitly, and publish them to their
-   * relevant subscriber interfaces.
+   * Process the instruction string into
    *
    * @param {String} it - the raw instructions
    * @return {Array}
@@ -20,6 +17,8 @@ module.exports =
 
     # Seperate the planet's grid size from the robot instructions.
     [grid-size, commands] = it .split /\n([\s\S]+)?/ 2
+
+    #console.log it
 
     if is-type 'Undefined' commands
       throw new Error 'There are no commands defined'
@@ -34,7 +33,12 @@ module.exports =
       commands |> split \\n\n |> map (.split \\n)
     ]
 
-  mobilize-robots: (grid-boundaries, commands) !->
+  mobilize-robots: ([grid-size, commands] = instructions) !->
 
-    command <-! commands .split \\n\n .for-each
-    new Robot gridBoundaries, command
+    console.log commands
+
+    #console.log commands
+
+    #commands |> each !->
+    #  console.log 'hello!'
+    #new Robot gridBoundaries, command

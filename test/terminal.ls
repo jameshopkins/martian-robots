@@ -2,7 +2,7 @@ require! <[ chai sinon ../src/terminal ]>
 
 {assert} = chai
 
-describe 'Instructions input', !->
+describe 'Instructions', !->
 
   specify 'throws an error if the string is 100 characters or more' !->
 
@@ -13,8 +13,6 @@ describe 'Instructions input', !->
 
   specify 'throws an error if no commands can be destructured from the input string' !->
 
-    # Split on the first occurence of a newline, and treat the first item as the
-    # commands
     assert.throw do
       terminal .process-instructions .bind terminal, \a * 99
       Error
@@ -31,3 +29,24 @@ describe 'Instructions input', !->
       terminal .process-instructions .bind terminal, '0 51\nA'
       Error
       'This grid size is too large. It must be 50x50 or smaller'
+
+  specify 'returns a valid data structure' !->
+
+    result = terminal .process-instructions '5 3\n1 1 E\nRFRFRFRF\n\n0 3 W'
+
+    # An array of upper-right grid coordinates
+    assert .deep-equal result[0], ['5', '3']
+
+    # A string consisting of a coordinate, followed by the initial coordinates
+    assert .equal result[1][0][0], '1 1 E'
+
+    # A string as the robot instruction
+    assert .equal result[1][0][1], 'RFRFRFRF'
+
+    assert .deep-equal result[1][1][0], '0 3 W'
+
+describe 'Robots', !->
+
+  #specify 'create a robot instance for each set of instructions'
+
+  #  result = terminal .process-instructions '5 3\n1 1 E\nRFRFRFRF'
