@@ -16,9 +16,8 @@ module.exports =
       throw new Error 'The instructions provided are too long - 100 characters maximum.'
 
     # Seperate the planet's grid size from the robot instructions.
-    [grid-size, commands] = it .split /\n([\s\S]+)?/ 2
 
-    #console.log it
+    [grid-size, commands] = it .split /\\n([\s\S]+)?/ 2
 
     if is-type 'Undefined' commands
       throw new Error 'There are no commands defined'
@@ -30,12 +29,12 @@ module.exports =
 
     [
       grid-size
-      commands |> split \\n\n |> map (.split \\n)
+      commands |> split \\\n\\n |> map (.split \\\n)
     ]
 
   mobilize-robots: ([grid-size, commands] = instructions) !->
 
-    console.log commands
+    #console.log commands
 
     #console.log commands
 

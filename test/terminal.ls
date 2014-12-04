@@ -21,18 +21,18 @@ describe 'Instructions', !->
   specify 'throws an error if either of the upper right coordinates are larger than 50' !->
 
     assert.throw do
-      terminal .process-instructions .bind terminal, '51 0\nA'
+      terminal .process-instructions .bind terminal, '51 0\\nA'
       Error
       'This grid size is too large. It must be 50x50 or smaller'
 
     assert.throw do
-      terminal .process-instructions .bind terminal, '0 51\nA'
+      terminal .process-instructions .bind terminal, '0 51\\nA'
       Error
       'This grid size is too large. It must be 50x50 or smaller'
 
   specify 'returns a valid data structure' !->
 
-    result = terminal .process-instructions '5 3\n1 1 E\nRFRFRFRF\n\n0 3 W'
+    result = terminal .process-instructions '5 3\\n1 1 E\\nRFRFRFRF\\n\\n0 3 W'
 
     # An array of upper-right grid coordinates
     assert .deep-equal result[0], ['5', '3']
@@ -49,4 +49,4 @@ describe 'Robots', !->
 
   #specify 'create a robot instance for each set of instructions'
 
-  #  result = terminal .process-instructions '5 3\n1 1 E\nRFRFRFRF'
+  #  result = terminal .process-instructions '5 3\\n1 1 E\\nRFRFRFRF'
