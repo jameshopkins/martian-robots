@@ -35,15 +35,15 @@ describe 'Instructions', !->
     result = terminal .process-instructions '5 3\\n1 1 E\\nRFRFRFRF\\n\\n0 3 W'
 
     # An array of upper-right grid coordinates
-    assert .deep-equal result[0], ['5', '3']
+    assert .deep-equal result.grid-size, ['5', '3']
 
     # A string consisting of a coordinate, followed by the initial coordinates
-    assert .equal result[1][0][0], '1 1 E'
+    assert .equal result.commands[0][0], '1 1 E'
 
     # A string as the robot instruction
-    assert .equal result[1][0][1], 'RFRFRFRF'
+    assert .equal result.commands[0][1], 'RFRFRFRF'
 
-    assert .deep-equal result[1][1][0], '0 3 W'
+    assert .deep-equal result.commands[1][0], '0 3 W'
 
 describe 'Robots', !->
 
