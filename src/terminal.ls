@@ -1,6 +1,6 @@
-{is-type, split, each, map} = require 'prelude-ls'
+{is-type, split, each, map, first} = require \prelude-ls
 
-require! <[ ./robot ]>
+Robot = require \./robot
 
 module.exports =
 
@@ -8,7 +8,7 @@ module.exports =
    * Process the instruction string into
    *
    * @param {String} it - the raw instructions
-   * @return {Array}
+   * @return {Object}
    */
   process-instructions: ->
 
@@ -19,25 +19,19 @@ module.exports =
 
     [grid-size, commands] = it .split /\\n([\s\S]+)?/ 2
 
-    if is-type 'Undefined' commands
+    if is-type \Undefined commands
       throw new Error 'There are no commands defined'
 
     grid-size .= split ' '
 
     if grid-size[0] > 50 or grid-size[1] > 50
-       throw new RangeError 'This grid size is too large. It must be 50x50 or smaller'
+      throw new RangeError 'This grid size is too large. It must be 50x50 or smaller'
 
-    [
+    {
       grid-size
-      commands |> split \\\n\\n |> map (.split \\\n)
-    ]
+      commands: commands |> split \\\n\\n |> map (.split \\\n |> map (.split ' '))
+    }
 
-  mobilize-robots: ([grid-size, commands] = instructions) !->
+  mobilize-robots: (instructions) ->
 
-    #console.log commands
-
-    #console.log commands
-
-    #commands |> each !->
-    #  console.log 'hello!'
-    #new Robot gridBoundaries, command
+    instructions.commands |> each !-> new Robot instructions.grid-size, it

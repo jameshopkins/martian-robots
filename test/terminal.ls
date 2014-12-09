@@ -38,15 +38,16 @@ describe 'Instructions', !->
     assert .deep-equal result.grid-size, ['5', '3']
 
     # A string consisting of a coordinate, followed by the initial coordinates
-    assert .equal result.commands[0][0], '1 1 E'
+    assert .deep-equal result.commands[0][0], ['1' '1' 'E']
 
     # A string as the robot instruction
     assert .equal result.commands[0][1], 'RFRFRFRF'
 
-    assert .deep-equal result.commands[1][0], '0 3 W'
+    assert .deep-equal result.commands[1][0], ['0' '3' 'W']
 
-describe 'Robots', !->
+  specify 'the correct number of robots are run' !->
 
-  #specify 'create a robot instance for each set of instructions'
 
-  #  result = terminal .process-instructions '5 3\\n1 1 E\\nRFRFRFRF'
+#describe 'Robots', !->
+
+#  specify 'create a robot instance for each set of instructions' !->
