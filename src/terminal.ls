@@ -1,4 +1,4 @@
-{is-type, split, each, map, first} = require \prelude-ls
+{is-type, split, each, map, first, reject, empty} = require \prelude-ls
 
 Robot = require \./robot
 
@@ -17,21 +17,28 @@ module.exports =
 
     # Seperate the planet's grid size from the robot instructions.
 
-    [grid-size, commands] = it .split /\\n([\s\S]+)?/ 2
+    [grid-boundary, commands] = it .split /\\n([\s\S]+)?/ 2
 
     if is-type \Undefined commands
       throw new Error 'There are no commands defined'
 
-    grid-size .= split ' '
+    # Process grid boundary
 
-    if grid-size[0] > 50 or grid-size[1] > 50
-      throw new RangeError 'This grid size is too large. It must be 50x50 or smaller'
+    grid-boundary .= split ' '
+
+    unless grid-boundary.length is 2
+      throw new Error 'Grid boundaries must be formatted as two space-delimited coordinates'
+
+    unless grid-boundary |> reject (< 51) |> empty
+      throw new Error 'Each grid boundary must be an integer from 1 to 50'
 
     {
-      grid-size
+      grid-boundary
       commands: commands |> split \\\n\\n |> map (.split \\\n |> map (.split ' '))
     }
 
   mobilize-robots: (instructions) ->
 
-    instructions.commands |> each !-> new Robot instructions.grid-size, it
+    instructions.commands |> each !->
+      #robot = new Robot instructions.grid-boundary, it
+      #robot .start-movement-sequence!

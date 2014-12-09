@@ -18,24 +18,28 @@ describe 'Instructions', !->
       Error
       'There are no commands defined'
 
-  specify 'throws an error if either of the upper right coordinates are larger than 50' !->
+  describe 'Boundaries', !->
 
-    assert.throw do
-      terminal .process-instructions .bind terminal, '51 0\\nA'
-      Error
-      'This grid size is too large. It must be 50x50 or smaller'
+    specify 'throws an error if grid boundaries are not formatted as two space-delimted coordinates' !->
 
-    assert.throw do
-      terminal .process-instructions .bind terminal, '0 51\\nA'
-      Error
-      'This grid size is too large. It must be 50x50 or smaller'
+      assert.throw do
+        terminal .process-instructions .bind terminal, '53\\n1 1 E\\nRFRFRFRF'
+        Error
+        'Grid boundaries must be formatted as two space-delimited coordinates'
+
+    specify 'throws an error if either grid boundary if it\'s value is greater than 50' !->
+
+      assert.throws do
+        terminal .process-instructions .bind terminal, '5 51\\n1 1 E\\nRFRFRFRF'
+        Error
+        'Each grid boundary must be an integer from 1 to 50'
 
   specify 'returns a valid data structure' !->
 
     result = terminal .process-instructions '5 3\\n1 1 E\\nRFRFRFRF\\n\\n0 3 W'
 
     # An array of upper-right grid coordinates
-    assert .deep-equal result.grid-size, ['5', '3']
+    assert .deep-equal result.grid-boundary, ['5', '3']
 
     # A string consisting of a coordinate, followed by the initial coordinates
     assert .deep-equal result.commands[0][0], ['1' '1' 'E']
