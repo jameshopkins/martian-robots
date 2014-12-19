@@ -48,10 +48,3 @@ describe 'Instructions', !->
     assert .equal result.commands[0][1], 'RFRFRFRF'
 
     assert .deep-equal result.commands[1][0], ['0' '3' 'W']
-
-  specify 'the correct number of robots are run' !->
-
-
-#describe 'Robots', !->
-
-#  specify 'create a robot instance for each set of instructions' !->

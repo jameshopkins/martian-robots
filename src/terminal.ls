@@ -38,9 +38,9 @@ module.exports =
       commands: commands |> split \\\n\\n |> map (.split \\\n |> map (.split ' '))
     }
 
-  mobilize-robots: (instructions) !->
+  mobilize-robots: ({grid-boundary, commands}) !->
 
-    instructions.commands |> each !->
+    commands |> each !->
 
-      robot = new Robot instructions.grid-boundary, it
+      robot = new Robot grid-boundary, it
       robot .start-movement-sequence!

@@ -1,5 +1,5 @@
-{process-instructions, mobilize-robots} = require './terminal'
+{process-instructions, mobilize-robots} = require \./terminal
 
-martian-robots = mobilize-robots . process-instructions
+martian-robots = process-instructions >> mobilize-robots
 
 martian-robots process.argv[2]
