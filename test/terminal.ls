@@ -7,7 +7,7 @@ describe 'Instructions', !->
   specify 'throws an error if the string is 100 characters or more' !->
 
     assert.throw do
-      terminal .process-instructions .bind terminal, \a * 100
+      terminal .process-instructions .bind terminal, \a * 101
       Error
       'The instructions provided are too long - 100 characters maximum.'
 

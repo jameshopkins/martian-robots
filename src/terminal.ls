@@ -1,6 +1,7 @@
-{is-type, split, each, map, first, reject, empty} = require \prelude-ls
-
-Robot = require \./robot
+require! {
+  'prelude-ls': {is-type, split, each, map, any}
+  './robot': Robot
+}
 
 module.exports =
 
@@ -12,7 +13,7 @@ module.exports =
    */
   process-instructions: ->
 
-    if it.length >= 100
+    if it.length > 100
       throw new Error 'The instructions provided are too long - 100 characters maximum.'
 
     # Seperate the planet's grid size from the robot instructions.
@@ -29,7 +30,7 @@ module.exports =
     unless grid-boundary.length is 2
       throw new Error 'Grid boundaries must be formatted as two space-delimited coordinates'
 
-    unless grid-boundary |> reject (< 51) |> empty
+    if grid-boundary |> any (> 50)
       throw new Error 'Each grid boundary must be an integer from 1 to 50'
 
     {
@@ -37,8 +38,9 @@ module.exports =
       commands: commands |> split \\\n\\n |> map (.split \\\n |> map (.split ' '))
     }
 
-  mobilize-robots: (instructions) ->
+  mobilize-robots: (instructions) !->
 
     instructions.commands |> each !->
-      #robot = new Robot instructions.grid-boundary, it
-      #robot .start-movement-sequence!
+
+      robot = new Robot instructions.grid-boundary, it
+      robot .start-movement-sequence!
