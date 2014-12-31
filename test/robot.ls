@@ -11,7 +11,7 @@ describe 'Robot', !->
 
   before-each: do !->
 
-    grid-boundaries := ['1' '3']
+    grid-boundaries := ['5' '3']
     commands := [['1' '1' 'E'], ['RFRFRFRF']]
 
   specify 'throws an error if the robot position isn\'t an array comprising of three items' !->
@@ -40,8 +40,38 @@ describe 'Robot', !->
     assert .equal robot.create-circular-buffer-of-cardinal-points('S', 'R'), 3
     assert .equal robot.create-circular-buffer-of-cardinal-points('W', 'L'), 2
 
-  specify 'move forward' !->
+  describe 'Move forward', !->
 
-    robot = new Robot grid-boundaries, [['0' '1' 'E'], ['RFRFRFRF']]
+    specify 'move forward correctly' !->
 
-    robot .move-forward 'W'
+      robot = new Robot ['2' '2'], [['1' '1' 'E'], ['RFRFRFRF']]
+
+      robot .move-forward 'N'
+      assert .equal robot.current-position.y, 2
+
+      robot .move-forward 'S'
+      assert .equal robot.current-position.y, 1
+
+      robot .move-forward 'E'
+      assert .equal robot.current-position.x, 2
+
+      robot .move-forward 'W'
+      assert .equal robot.current-position.x, 1
+
+    specify 'registers as lost if it strays' !->
+
+      robot = new Robot ['1' '1'], [['1' '1' 'E'], ['RFRFRFRF']]
+
+      robot .move-forward 'N'
+      assert .is-true robot.is-lost
+
+  describe 'Any subsequent', !->
+
+    specify 'hello' !->
+
+      robot1 = new Robot ['1' '1'], [['1' '1' 'E'], ['RFRFRFRF']]
+      robot1 .move-forward 'N'
+
+      robot2 = new Robot ['1' '1'], [['1' '1' 'E'], ['RFRFRFRF']]
+      robot2 .move-forward 'N'
+      assert .is-false robot2.is-lost
