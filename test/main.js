@@ -1,5 +1,23 @@
 const test = require('ava');
 
-test('foo', t => {
-	t.pass();
+const { parseRawInput } = require('../src/main.js');
+
+test('Parse raw input into a sane structure', t => {
+    const rawInput = '5 3\n1 1 E\nRFRFRFRF\n\n3 2 N\nFRRFLLFFRRFLL\n\n0 3 W\nLLFFFLFLFL';
+    const expected = {
+        gridSize: ['5', '3'],
+        instructions: [
+            {
+                initialPosition: ['1', '1', 'E'],
+                movements: ['R', 'F', 'R', 'F', 'R', 'F', 'R', 'F' ]
+            }, {
+                initialPosition: ['3', '2', 'N'],
+                movements: ['F', 'R', 'R', 'F', 'L', 'L', 'F', 'F', 'R', 'R', 'F', 'L', 'L']
+            }, {
+                initialPosition: ['0', '3', 'W'],
+                movements: ['L', 'L', 'F', 'F', 'F', 'L', 'F', 'L', 'F', 'L' ]
+            }
+        ]
+    }
+    t.deepEqual(parseRawInput(rawInput), expected);
 });

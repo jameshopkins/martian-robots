@@ -18,5 +18,8 @@
   "homepage": "https://github.com/jameshopkins/martian-robots#readme",
   "devDependencies": {
     "ava": "^3.15.0"
+  },
+  "dependencies": {
+    "rambda": "^6.7.0"
   }
 }
