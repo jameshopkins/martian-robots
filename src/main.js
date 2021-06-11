@@ -2,7 +2,7 @@ const { compose, drop, map, split, take, move } = require('rambda');
 
 // Parse raw string input into a sane structure
 
-module.exports.parseRawInput = input => {
+const parseRawInput = input => {
     const configurationDelimeter = '\n';
 
     const getGridSize = compose(
@@ -31,3 +31,5 @@ module.exports.parseRawInput = input => {
         instructions: getInstructions(input)
     }
 }
+
+module.exports = { parseRawInput }
