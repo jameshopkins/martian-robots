@@ -1,4 +1,7 @@
 // Store the associations between cardinal directions and cartesian grid
+
+const { move } = require("rambda");
+
 // lines.
 const cartesianDirectionsGrid = [
     ['N', 'y', 'positive'],
@@ -14,9 +17,19 @@ const getCardinalPointIndex = cardinalPoint => cartesianDirectionsGrid.findIndex
 // This can be anything; it just needs to be an indentfiable pointer.
 const serializeCoordinates = ({x, y}) => `x: ${x}, y: ${y}`;
 
+const renderMovementOutput = ({x, y}, direction, isLost) => {
+    const presentationMethod = isLost ? console.error : console.log;
+    const output = [x, y, direction]
+    if (isLost) {
+        return presentationMethod(output.concat(['LOST']).join(' '))
+    }
+    presentationMethod(output.join(' '))
+}
+
 class Robot {
     constructor(gridBoundaries, {position, direction, movements}) {
         this.isLost = false;
+        this.movements = movements;
         this.gridBoundaries = gridBoundaries;
         this.currentPosition = position;
         this.currentDirectionIndex = cartesianDirectionsGrid.findIndex(([dir]) => dir === direction);
@@ -80,6 +93,24 @@ class Robot {
             // positioned within the grid boundaries.
             this.currentPosition = newPosition;
         }
+    }
+
+    startMovementSequence() {
+        this.movements.forEach(movement => {
+            if (this.isLost) { return; }
+
+            switch (movement) {
+                case 'L':
+                case 'R':
+                    this.turnDirection(movement);
+                    break;
+                case 'F':
+                    this.moveForward();
+                    break;
+            }
+        });
+
+        renderMovementOutput(this.currentPosition, cartesianDirectionsGrid[this.currentDirectionIndex][0], this.isLost);
     }
 }
 

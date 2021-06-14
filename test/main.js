@@ -49,11 +49,11 @@ test('Calculate next cardinal point data', t => {
     t.is(robot.currentDirectionIndex, 1);
 })
 
-const createRobotAndMoveForward = (direction, position) => {
+const createRobotAndMoveForward = (direction, position, movements = []) => {
     const instruction = {
         position,
         direction,
-        movements: []
+        movements
     }
     return new Robot({x: 5, y: 3}, instruction);
 }
