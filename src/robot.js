@@ -12,8 +12,6 @@ const cartesianDirectionsGrid = [
 
 let lostRobots = [];
 
-const getCardinalPointIndex = cardinalPoint => cartesianDirectionsGrid.findIndex(data => data[0] === cardinalPoint);
-
 // This can be anything; it just needs to be an indentfiable pointer.
 const serializeCoordinates = ({x, y}) => `x: ${x}, y: ${y}`;
 
