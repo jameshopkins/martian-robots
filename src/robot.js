@@ -11,6 +11,7 @@ let lostRobots = [];
 
 const getCardinalPointIndex = cardinalPoint => cartesianDirectionsGrid.findIndex(data => data[0] === cardinalPoint);
 
+// This can be anything; it just needs to be an indentfiable pointer.
 const serializeCoordinates = ({x, y}) => `x: ${x}, y: ${y}`;
 
 class Robot {
@@ -27,7 +28,6 @@ class Robot {
     // if you're facing north, then turn left, you'll be facing west.
 
     turnDirection(nextDirection) {
-
         let cardinalPointIndex = this.currentDirectionIndex
 
         switch (nextDirection) {
@@ -48,7 +48,6 @@ class Robot {
         }
 
         this.currentDirectionIndex = cardinalPointIndex
-
     }
 
     moveForward() {
@@ -73,6 +72,8 @@ class Robot {
             if (lostRobots.find(position => position === serialisedNewPosition)) {
                 return;
             }
+
+            this.isLost = true
             lostRobots.push(serialisedNewPosition)
         } else {
             // Only move the robot if that movement results in the robot being
@@ -81,16 +82,5 @@ class Robot {
         }
     }
 }
-
-const moveForward = (gridBoundaries, cardinalPoint, currentPosition) => {
-    const [, axis, sign] = cartesianDirectionsGrid[getCardinalPointIndex(cardinalPoint)];
-    const generateNewCoordinate = {
-        positive: coord => currentPosition[coord] + 1,
-        negative: coord => currentPosition[coord] - 1
-    }
-
-    const newCoordinate = generateNewCoordinate[sign](axis);
-    const newPosition = {...currentPosition, [axis]: newCoordinate};
-};
 
 module.exports = { Robot }

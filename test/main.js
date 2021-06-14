@@ -1,6 +1,7 @@
 const test = require('ava');
 
 const { parseRawInput } = require('../src/input-parsing.js');
+const robot = require('../src/robot.js');
 const { Robot } = require('../src/robot.js');
 
 test('Parse raw input into a sane structure', t => {
@@ -48,26 +49,48 @@ test('Calculate next cardinal point data', t => {
     t.is(robot.currentDirectionIndex, 1);
 })
 
-test('Move forward correctly', t => {
-
+const createRobotAndMoveForward = (direction, position) => {
     const instruction = {
-        position: {x: 1, y:1},
-        direction: 'S',
-        movements: ['R', 'F', 'R', 'F', 'R', 'F', 'R', 'F' ]
+        position,
+        direction,
+        movements: []
     }
+    return new Robot({x: 5, y: 3}, instruction);
+}
 
-    const robot1 = new Robot({x: 5, y: 3}, instruction);
-
-    // Happy path
+test('Moving forward into a valid space', t => {
+    // Happy paths
+    const robot1 = createRobotAndMoveForward('S', {x: 1, y: 1});
     robot1.moveForward();
     t.deepEqual(robot1.currentPosition, { y: 0, x: 1 });
 
-    // t.deepEqual(moveForward({x: 2, y: 2}, 'S', {x: 1, y: 1}), { y: 0, x: 1 });
-    // t.deepEqual(moveForward({x: 2, y: 2}, 'W', {x: 1, y: 1}), { y: 1, x: 0 });
-    // t.deepEqual(moveForward({x: 2, y: 2}, 'N', {x: 1, y: 0}), { y: 1, x: 1 });
+    const robot2 = createRobotAndMoveForward('N', {x: 2, y: 1});
+    robot2.moveForward();
+    t.deepEqual(robot2.currentPosition, { y: 2, x: 2 });
+    robot2.moveForward();
+    t.deepEqual(robot2.currentPosition, { y: 3, x: 2 });
+})
 
-    // // Abort the robot if we know that by moving forward, the robot will be lost
-    // moveForward({x: 2, y: 2}, 'N', {x: 1, y: 2});
-    // // Since the second robot would become lost, the current instruction is ignored
-    // t.assert(typeof moveForward({x: 2, y: 2}, 'N', {x: 1, y: 2}) === 'undefined');
+test('Moving forward into an invalid space', t => {
+    // Lets go off grid (by going into negative-coordinate land)!
+    const robot = createRobotAndMoveForward('S', {x: 2, y: 1});
+    robot.moveForward();
+    // The robot can move because it can move to a valid position
+    t.deepEqual(robot.currentPosition, { y: 0, x: 2 });
+    // The robot can't move from the current position because it'd place it on a negative coordinate
+    robot.moveForward()
+    t.truthy(robot.isLost)
+})
+
+test('Attempting to move forward into an invalid space where a previous robot has been lost', t => {
+    // 1) Make robot1 get lost.
+    // 2) Check robot2 doesn't become lost
+    const robot1 = createRobotAndMoveForward('N', {x: 2, y: 3});
+    robot1.moveForward();
+    t.truthy(robot1.isLost);
+
+    const robot2 = createRobotAndMoveForward('N', {x: 2, y: 3});
+    robot2.moveForward()
+    t.falsy(robot2.isLost); // robot2 refuses to get lost!
+    t.deepEqual(robot2.currentPosition, {x: 2, y: 3})
 })
