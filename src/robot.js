@@ -1,8 +1,6 @@
 // Store the associations between cardinal directions and cartesian grid
-
-const { move } = require("rambda");
-
 // lines.
+
 const cartesianDirectionsGrid = [
     ['N', 'y', 'positive'],
     ['E', 'x', 'positive'],
